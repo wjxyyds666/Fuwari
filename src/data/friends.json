@@ -11,6 +11,6 @@
       "avatar": "http://wjxyyds666.github.io/favicon.svg",
       "description": "The only way to do great is to love what you do",
       "url": "http://wjxyyds666.github.io"
-    },
+    } // 删掉这里原来的逗号
   ]
 }
