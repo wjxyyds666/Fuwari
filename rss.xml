@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>嘿！ Blog</title><description>技术分享与实践</description><link>https://2x.nz/</link><language>zh_CN</language><item><title>全自动ICP查询API</title><link>https://2x.nz/posts/auto-icp-query/</link><guid isPermaLink="true">https://2x.nz/posts/auto-icp-query/</guid><description>突然听到个很有意思的项目：自动ICP查询，搜集了一下市面上的轮子然后改改，嗯！能用了！</description><pubDate>Fri, 12 Sep 2025 04:50:10 GMT</pubDate><content:encoded>&lt;h1&gt;原理&lt;/h1&gt;
+&lt;p&gt;由 &lt;a href=&quot;https://github.com/ravizhan/ICP-spider&quot;&gt;ravizhan/ICP-spider: 基于yolov8+孪生网络识别验证码的ICP备案查询程序。从工业和信息化部政务服务平台查询实时数据，高精度过验证码&lt;/a&gt; 提供图形验证码支持&lt;/p&gt;
+&lt;p&gt;因为验证码识别成功后得到的Token有效时间大概为30s，此期间无需再次重新识别，故开发一个Token生命周期管理器，后台始终维护有效的Token，用户查询时直接使用有效的Token查询，方便快速&lt;/p&gt;
+&lt;h1&gt;使用&lt;/h1&gt;
+&lt;p&gt;查询 qq.com 的ICP备案信息：&lt;/p&gt;
+&lt;p&gt;http://icp.2x.nz/?domain=qq.com&lt;/p&gt;
+&lt;p&gt;理应返回如下信息，若未返回结果，则刚好Token失效且生命周期管理器正在获取新的Token，等待几秒后再次查询即可&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+  &quot;code&quot;: 200,
+  &quot;msg&quot;: &quot;操作成功&quot;,
+  &quot;params&quot;: {
+    &quot;endRow&quot;: 0,
+    &quot;hasNextPage&quot;: false,
+    &quot;hasPreviousPage&quot;: false,
+    &quot;isFirstPage&quot;: true,
+    &quot;isLastPage&quot;: true,
+    &quot;list&quot;: [
+      {
+        &quot;contentTypeName&quot;: &quot;文化、文化、宗教、出版、文化、新闻、文化、宗教、宗教、出版&quot;,
+        &quot;domain&quot;: &quot;qq.com&quot;,
+        &quot;domainId&quot;: 190000203203,
+        &quot;leaderName&quot;: &quot;&quot;,
+        &quot;limitAccess&quot;: &quot;否&quot;,
+        &quot;mainId&quot;: 547280,
+        &quot;mainLicence&quot;: &quot;粤B2-20090059&quot;,
+        &quot;natureName&quot;: &quot;企业&quot;,
+        &quot;serviceId&quot;: 4134047,
+        &quot;serviceLicence&quot;: &quot;粤B2-20090059-5&quot;,
+        &quot;unitName&quot;: &quot;深圳市腾讯计算机系统有限公司&quot;,
+        &quot;updateRecordTime&quot;: &quot;2022-09-06 15:51:52&quot;
+      }
+    ],
+    &quot;navigateFirstPage&quot;: 1,
+    &quot;navigateLastPage&quot;: 1,
+    &quot;navigatePages&quot;: 8,
+    &quot;navigatepageNums&quot;: [
+      1
+    ],
+    &quot;nextPage&quot;: 0,
+    &quot;pageNum&quot;: 1,
+    &quot;pageSize&quot;: 10,
+    &quot;pages&quot;: 1,
+    &quot;prePage&quot;: 0,
+    &quot;size&quot;: 1,
+    &quot;startRow&quot;: 0,
+    &quot;total&quot;: 1
+  },
+  &quot;success&quot;: true
+}
+&lt;/code&gt;&lt;/pre&gt;
+</content:encoded></item><item><title>公开架构，我的二次元随机图API是怎么做的</title><link>https://2x.nz/posts/acg-randompic-api/</link><guid isPermaLink="true">https://2x.nz/posts/acg-randompic-api/</guid><description>发现很多小伙伴也想搭建一个自己的随机图API，这里我就公开一下我的架构，打磨2年了，供大家参考~</description><pubDate>Sat, 06 Sep 2025 02:22:00 GMT</pubDate><content:encoded>&lt;h1&gt;API端点&lt;/h1&gt;
+&lt;p&gt;&lt;s&gt;门户： https://pic.072103.xyz&lt;/s&gt;&lt;/p&gt;
+&lt;p&gt;&lt;s&gt;门户里面的API端点： https://hpic.072103.xyz https://vpic.072103.xyz （CF Worker）&lt;/s&gt;&lt;/p&gt;
+&lt;p&gt;博客用的API端点： https://eopfapi.2b2x.cn/pic?img=ua （EdgeOne Pages Functions）&lt;/p&gt;
+&lt;h1&gt;新版实现&lt;/h1&gt;
+&lt;p&gt;图源存放EdgeOne Page，EdgeOne Pages Functions作为入口，当收到请求后首先区分 横屏、竖屏、自适应，即 &lt;code&gt;?img=h&lt;/code&gt; &lt;code&gt;?img=v&lt;/code&gt; &lt;code&gt;?img=ua&lt;/code&gt; ，随后返回其内部存储的相应图片，关于更多详情，请参考源码： &lt;a href=&quot;https://github.com/afoim/EdgeOne_Function_PicAPI/blob/main/functions/pic.js&quot;&gt;EdgeOne_Function_PicAPI/functions/pic.js at main · afoim/EdgeOne_Function_PicAPI&lt;/a&gt;&lt;/p&gt;
+&lt;h1&gt;旧版实现&lt;/h1&gt;
+&lt;p&gt;利用 cnb.cool 存储图片eopf做中间代理&lt;/p&gt;
+&lt;h1&gt;旧旧版实现&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;在Cloudflare R2被刷了 &lt;strong&gt;7千万次（GET）请求&lt;/strong&gt; 并且扣款 &lt;strong&gt;28.08 USD（折合人民币 207.93 CNY）&lt;/strong&gt; 后废弃&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;图源全部存在 &lt;strong&gt;Cloudflare R2&lt;/strong&gt;，全部采用 &lt;strong&gt;Webp&lt;/strong&gt; 格式，仅分类为 &lt;strong&gt;横屏、竖屏&lt;/strong&gt; ，如图&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-31-04-13-08-image.CQ_Xo6cU_Z19uHDO.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-31-04-13-17-image.DJLoqL7l_pXlsd.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;API就拿我正投入使用的 https://eopfapi.2b2x.cn/pic?img=ua 来说&lt;/p&gt;
+&lt;p&gt;看域名也可以看出来，这是一个 &lt;strong&gt;EdgeOne Pages Functions&lt;/strong&gt; 服务（下文简称 &lt;strong&gt;eopf&lt;/strong&gt; ），什么？你问为什么用这个？那当然是因为！ &lt;strong&gt;目前所有功能完全免费！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-31-04-18-45-image.BXXhv1XP_ZYQMb5.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;源码在 &lt;a href=&quot;https://github.com/afoim/EdgeOne_Function_PicAPI&quot;&gt;afoim/EdgeOne_Function_PicAPI: 适用于EdgeOne边缘函数的随机图API&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;原理为让 &lt;strong&gt;eopf&lt;/strong&gt; 连接上 &lt;strong&gt;Cloudflare R2&lt;/strong&gt; 然后随机拿一张图出来。没错！就这么简单！&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;上文提到的另一个CF Worker端点原理也一样，只不过CF内部连接R2就不用手搓S3鉴权了&lt;/em&gt;&lt;/p&gt;
+</content:encoded></item><item><title>我去！GithubEdu还能再再再嫖俩免费一年域名？！</title><link>https://2x.nz/posts/ghedu-free-name/</link><guid isPermaLink="true">https://2x.nz/posts/ghedu-free-name/</guid><description>也是依旧在群u的帮助下又捞了俩米！</description><pubDate>Mon, 11 Aug 2025 23:04:10 GMT</pubDate><content:encoded>&lt;h1&gt;正式开始&lt;/h1&gt;
+&lt;p&gt;前往 &lt;a href=&quot;https://education.github.com/pack&quot;&gt;GitHub 学生开发者包 - GitHub Education&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;往下滚动 找到&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-23-05-40-107c27403a989dddcdd101180ee13509.Bdv8v17M_Zm1KfO.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;点击登录并验证你的学生身份&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-23-05-55-72bea2d54c200e08fa652d3997adcf06.CYuOJohL_2b3epy.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;短域名也有免费的！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-23-06-11-e4fe0a62548c9c69d32cb2a79176a52b.CUv8x0CJ_ZVcDal.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;长域名更是不在话下！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-23-06-23-b45ebff5a8fe5214bb0291d77cb3fa1e.CzBrbT5U_Z13TDQu.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;但是最终结账的时候只能免费&lt;strong&gt;两个&lt;/strong&gt;域名哦~&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-23-06-43-e67a6d8837878e07ef1b2bb5b8cb4d11.DMAAzGm8_I3HkQ.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;需要绑卡验证，扣0.00元。Bybit虚拟卡可用&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-23-07-06-bfaade641dbd1c125301195d4ad28bed.DEn3MxXk_EsB7t.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-23-07-10-bdd91d31b4c3c388555faad961924cc0.B67ulOTn_1zYb3C.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;等待跑进度条~&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-23-07-39-ea95cc5fbfc9ac8fcec2f90614d49d6a.5va6bTGP_ZiSo2d.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;接下来老生常谈的改NS到Cloudflare&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-23-07-56-85434553c9304a3f0a0ccc10accbef01.DnTiR5Pr_1I7Peo.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-23-08-01-bd48e80dafba30f3e4a98a6bcae3f04e.msV9quTh_Z2gXE7l.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-23-08-05-6ae9ce6c4cc5332003ac8101653477b7.2erY6_8x_Z2j5phi.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;成功激活~&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-23-08-13-6ceb145115731817f2738c711359dc3f.CvmlvRGT_1rWPaK.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</content:encoded></item><item><title>wow！有GithubEdu资格？再嫖一个免费一年的.me域名！</title><link>https://2x.nz/posts/ghedu-free-me/</link><guid isPermaLink="true">https://2x.nz/posts/ghedu-free-me/</guid><description>在群u的提醒下，发现除了.tech，还能再嫖一个米~</description><pubDate>Mon, 11 Aug 2025 22:37:55 GMT</pubDate><content:encoded>&lt;blockquote&gt;
+&lt;p&gt;请先通过&lt;a href=&quot;/posts/github-edu/&quot;&gt;这篇文章&lt;/a&gt;拿到Github Edu~&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;前往 &lt;a href=&quot;https://education.github.com/pack&quot;&gt;GitHub 学生开发者包 - GitHub Education&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;往下滚直到找到这个&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-22-40-15-747b62efa69a5b34182a68ac4c7130cb.C95MVNS1_7T7vI.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;点击这里&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-22-40-31-image.CYBLVVxN_FGSnw.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;进行Github授权&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-22-40-48-5e092849ebad203968bd801ad2d4534a.CRQLB_sn_ZQlpz2.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;成功验证学生资格咯~&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-22-41-00-703f88997e8c2281f2a473e03a19a061.DlvbtUyN_Z4SfJr.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;选一个你喜欢的 .me 域名，然后加入购物车（FREE！）&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-22-41-21-0a5f5a19e86e622f923b2ca7ec2d0a1e.D94s_DYJ_ZJutoJ.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;勾上Github Page，填上你的Github邮箱&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-22-41-48-1812c773c7f4044f2705f565dfb443bc.BZDbzoZV_sfLzr.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;接下来登录使用Github邮箱注册的号，没有号就注册一个！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-22-42-19-b6c04a5c6d9c66e729c54d9f66c2ef44.RaY41u8l_1AHtMS.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;完成订单咯~&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-22-42-33-8b2edf1503f41426c60a0218c87b8ae5.C_dalTs__1F4C10.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;在控制台将NS转到Cloudflare！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-22-42-47-5a59c356ad54788f34f0cfee2428853b.B7GQ-4dp_1Y2hiT.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-22-42-52-dcbcc938cbfaaade3d7a98538af3a26a.BkU4qQ0K_s4M5X.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-22-42-56-de9a3668c84d4209aa997c643711befb.Dz7OxVTj_Z1jfHpg.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;NameCheap的NS传播似乎有些慢，等等咯~&lt;/p&gt;
+&lt;p&gt;半小时后有咯~&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-22-54-37-image.CPLcw1_W_Z1d5vlE.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</content:encoded></item><item><title>有Github Education？来嫖一年免费的.tech域名！</title><link>https://2x.nz/posts/ghedu-free-tech/</link><guid isPermaLink="true">https://2x.nz/posts/ghedu-free-tech/</guid><description>昨天也是成功通过了Github Edu验证，发现可以白嫖一年免费的.tech域名！</description><pubDate>Mon, 11 Aug 2025 21:45:08 GMT</pubDate><content:encoded>&lt;h1&gt;正式开始&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;请先通过&lt;a href=&quot;/posts/github-edu/&quot;&gt;这篇文章&lt;/a&gt;拿到Github Edu~&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;然后前往 &lt;a href=&quot;https://education.github.com/pack&quot;&gt;GitHub Student Developer Pack - GitHub Education&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;一直往下滚，直到找到 .tech 字样的项目，点击蓝色链接进入&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-21-49-27-image.BQH-HSNr_n0szI.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;输入域名，然后添加到购物车&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-21-50-09-image.BFHGjK8X_Z1QAjbl.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;点击结账&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-21-50-20-image.BtJdcvAu_Z2awMLi.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;在这里登录Github账户（我已经免费拿一个了所以拿不了噜~）&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-21-51-05-image.B8aHEVo7_2isfYM.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;不出意外你的Total应该是0，点击就购买成功！&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;接下来来到 https://controlpanel.tech/&lt;/p&gt;
+&lt;p&gt;登录你的账户&lt;/p&gt;
+&lt;p&gt;输入你的域名并跳转到控制台&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-21-53-59-image.DhQuGy0B_Z1FkIM0.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;改NS到Cloudflare~&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-21-54-26-image.vafc2fnz_Z2c9DKx.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;当当当当~&lt;/p&gt;
+&lt;p&gt;激活咯~&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-11-21-54-51-db66a30e7c1fa897656df0c4e0d90390.DwLqDgfG_ZoB9JA.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</content:encoded></item><item><title>你说什么？企业微信能免费用Deepseek？！还能调成猫娘？！！</title><link>https://2x.nz/posts/qiyewx-deepseek/</link><guid isPermaLink="true">https://2x.nz/posts/qiyewx-deepseek/</guid><description>今天无意中建了个企业微信群，然后就发现可以加智能体，然后就调了个猫娘出来...</description><pubDate>Thu, 07 Aug 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;正式开始&lt;/h1&gt;
+&lt;p&gt;非常简单，首先你要有一个企业微信号&lt;/p&gt;
+&lt;p&gt;然后前往 &lt;code&gt;工作台&lt;/code&gt; 往下拉找到 &lt;code&gt;智能机器人&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-07-04-12-05-e290f1322ccb6a32082cad8d44017ba4.zsw3mMQz_17T62J.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;接下来就可以创建了&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;角色设定&lt;/code&gt; 可以提示词注入一下&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-07-04-13-32-13b847d4e4e01c1780dbf18828172ebe_720.BzFnpELz_1jsY2b.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;然后你就得到了&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-07-04-13-46-b3720dc7d5946e995cbf6df189d02677.BPA5Jfzz_Z1QxJeX.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;可以通过多种方式使用~&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/2025-08-07-04-14-58-d5ad87ab42f14ccbc220bf91ba5ec5d6.BWhTgjCp_276jJG.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</content:encoded></item><item><title>AI写不出优质的代码？其实是你引导错了！</title><link>https://2x.nz/posts/aicode-prompt/</link><guid isPermaLink="true">https://2x.nz/posts/aicode-prompt/</guid><description>如今，大语言模型百花齐放，有开山鼻祖OpenAI的ChatGPT系列，也有Anthropic开发的代码神器Claude系列。但是，哪怕模型再先进再聪明，如果用它的人使用的方法不对，那再好的模型用起来也是笨笨的</description><pubDate>Tue, 17 Jun 2025 00:00:00 GMT</pubDate><content:encoded>&lt;blockquote&gt;
+&lt;p&gt;视频链接： https://www.bilibili.com/video/BV1jw38z9EEn/&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1&gt;正确的引导方法&lt;/h1&gt;
+&lt;p&gt;先搞清楚你自己具体的需求。比如代码用什么语言编写？用什么技术栈？要具体实现什么功能？应用的场景是什么？是前端、后端还是全栈等等&lt;/p&gt;
+&lt;p&gt;逻辑清晰，简洁干练地表述你的需求。&lt;/p&gt;
+&lt;p&gt;比如： &lt;code&gt;编写一个Python脚本，在代码中硬编码S3_Endpoint、S3_Area、S3_key、S3_Secret、S3_Url（暂时全部留空）。运行后监听Ctrl+Alt+A，一旦被按下，立即检查剪贴板内是否有图片（支持文件格式和纯图格式），将其转换为Webp格式并上传到S3 API的S3_Url路径下，最后模拟键入![](图片链接)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;如果不确定AI是否理解了你的需求，可以CallBack一下，避免AI假装理解了你的需求然后一通乱写，比如上面的表述可以改为：&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;编写一个Python脚本，在代码中硬编码S3_Endpoint、S3_Area、S3_key、S3_Secret、S3_Url（暂时全部留空）。运行后监听Ctrl+Alt+A，一旦被按下，立即检查剪贴板内是否有图片（支持文件格式和纯图格式），将其转换为Webp格式并上传到S3 API的S3_Url路径下，最后模拟键入![](图片链接)。你明白了吗，请告诉我你将要如何完成这个任务，在我批准前请不要编写代码&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;有时候表达模糊实际上是好事。&lt;/p&gt;
+&lt;p&gt;因为你一旦开始描述创建一个什么什么变量，赋值为多少多少的时候，实际上你不是在用AI写代码，而是让AI将你的自然语言代码转换为编程语言代码，这就不是一个创造式的需求，而是一个翻译类的需求，最终代码生成质量的好坏完全取决于你的技术知识储备和逻辑思维是否强大。&lt;/p&gt;
+&lt;p&gt;所以，在面对大部分的需求，我们可以先大致描述一个框架，确认AI的方向正确后慢慢编写项目&lt;/p&gt;
+&lt;p&gt;AI也会犯错，并且极其容易瞎猜。不要尽信AI给出的内容，在涉及到你不懂的知识时，我们可以翻阅&lt;a href=&quot;https://wikipedia.org&quot;&gt;维基百科&lt;/a&gt;等权威知识网来验证&lt;/p&gt;
+&lt;p&gt;不要让AI一直自我检查。现代的AI IDE中，大部分已经实现了Agent模式，也就是： &lt;code&gt;用户提出需求 -&amp;gt; AI分析并实现需求 -&amp;gt; AI自动Debug -&amp;gt; 最终交付用户项目&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;但是在我半年的AI IDE使用经验中，如果代码出现Bug，请不要说类似： &lt;code&gt;这个代码跑不了，帮我看看&lt;/code&gt; 这样的话，我仍然建议你将完整的报错信息复制粘贴给AI并且要求他分析并解决，例如：&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;[报错信息]它报错了，请根据报错信息深度分析一下问题导致的原因，并给我一个解决方案&lt;/code&gt;，而不是让AI自身Debug。&lt;/p&gt;
+&lt;p&gt;因为有时候程序的报错可能只是一个简单的环境变量没配置，或者是你没有使用一个主流的方案，单纯让AI自我检讨只会让AI选择它最认为出错的地方。&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;换位思考一下，你有个甲方一直告诉你这个方案不行但是就不告诉你哪里不行你头不头疼。但是AI毕竟不是人类，它只会在它认为正确的道路上越走越远，运气好迭代几次Bug解决了，运气不好到达了IDE设置的迭代次数限制然后给你又新写了一坨新史山，然后你花钱买的请求数也就这样浪费了&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;最后，请善用AI，你也可以询问AI： &lt;code&gt;你的最佳调用方式是什么&lt;/code&gt;。&lt;s&gt;当然，她也有可能欺骗你&lt;/s&gt;。&lt;/p&gt;
+&lt;h1&gt;AI推荐&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://chatgpt.com&quot;&gt;ChatGPT&lt;/a&gt;：快速，不限额。适合解决你的疑问
+&lt;img src=&quot;https://2x.nz/_astro/c2e37057-78c9-403f-b3af-e84bdad98f1e.CXFN4SmF_Z1BLcAC.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://claude.ai&quot;&gt;Claude&lt;/a&gt;：相比于GPT更强大，更擅长编写代码，尤其是前端，目前大部分AI IDE都接入了Claude 3.5 Sonnet及以上的模型，非常适合编写可拆解，易维护的小脚本&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/f9adcc5e-64bc-48f0-8845-893242abec33.TPqPbTPQ_1eXmnB.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://code.visualstudio.com/&quot;&gt;VS Code（Github Copilot）&lt;/a&gt;：AI IDE。由微软开发，免费用户可以使用Claude 3.5 Sonnet模型，但是份额较少。Pro计划10USD/m，仅支持Paypal和海外卡支付&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/70b6f916-ba70-45a6-b572-3b32214f0c1f._MksDzQK_80lFQ.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.cursor.com&quot;&gt;Cursor&lt;/a&gt;：AI IDE。由Anysphere开发，免费用户仅能使用Auto模型（一般不会分配到Claude模型）。Pro计划10USD/m，仅支持Paypal和海外卡支付&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/4287002f-eb0e-43b0-87b7-1fa43c37a497.aynFFXXk_1VH2Gn.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.trae.ai&quot;&gt;Trae（国际版）&lt;/a&gt;：AI IDE。由字节跳动开发，需要国外IP。新用户Pro计划开通首月仅需3USD/m（之后为10USD/m），支持支付宝和海外卡支付。本人目前在用&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/40b76f69-2c50-49d0-b861-05f8879accab.D3TzgNS4_1eQCaH.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;写任何项目都完全不推荐使用网页版的任何大模型编写！请使用AI IDE！&lt;/p&gt;
+&lt;/blockquote&gt;
+</content:encoded></item><item><title>自建邮局太麻烦？来用网易免费企业邮！绑定你的域名收发自如！</title><link>https://2x.nz/posts/163-free-domain-email/</link><guid isPermaLink="true">https://2x.nz/posts/163-free-domain-email/</guid><description>网易免费企业邮是一个免费的电子邮箱服务，它最重要的特点就是可以绑定你的域名，比如sudo@onani.cn，并且完全免费且能收能发！</description><pubDate>Wed, 12 Mar 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;引言&lt;/h1&gt;
+&lt;p&gt;最早我开始知道域名邮箱是因为偶然在一位我朋友的开发群内看到他的微软账户绑定的邮箱是admin@他网站的域名.com。&lt;/p&gt;
+&lt;p&gt;我当时就很好奇，就去问他你这个邮箱是自建的吗？&lt;/p&gt;
+&lt;p&gt;因为我当时也知道可以通过购买VPS然后配上一些开源邮局框架来自建邮箱，但是这需要金钱和时间成本，而且我认为不大稳定，所以一直就没有试过，而且我觉得我当时的acofork@foxmail.com这个邮箱虽然是托管在QQ的，但是也够用了。&lt;/p&gt;
+&lt;p&gt;然后他说他用的是Cloudflare的邮件转发服务，我就心想这cf还能干这个，一番操作以下发现还真能。&lt;/p&gt;
+&lt;p&gt;在cf的域名配置中有一个电子邮件转发，可以将发给你域名的邮件转发到你自己用的邮箱，比如发给sikosiko@onani.cn的邮件会被cf转发给我的私用邮箱acofork@foxmail.com。&lt;/p&gt;
+&lt;p&gt;但是因为是转发，那么如果你想要以sikosiko@onani.cn这个身份发邮件就需要费一番周折了。我用的foxmail.com被腾讯收购了，现在作为QQ邮箱的服务提供，而QQ邮箱要绑定域名需要购买万恶的VIP，于是就只能通过Outlook、Gmail等支持免费绑定域名作为别名的邮箱来发邮件&lt;/p&gt;
+&lt;p&gt;但这也太割裂了吧，我在QQ邮箱上收到，然后还要去Outlook或者Gmail上面回复？于是我后面也还是继续使用我的私用邮箱，不去折腾什么域名邮箱了，毕竟方便比什么都重要&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;但是话又说回来，最近发现了这个网易免费企业邮，可以免费绑定你的域名用作域名邮箱，并且直接将MX解析解析到网易，既能收，也能发。而且这个项目也不是刚出的，貌似在2015就已经有了，所以也不用担心灵车，至少比你自建的稳定😋&lt;/p&gt;
+&lt;h1&gt;正式开始&lt;/h1&gt;
+&lt;h2&gt;创建账号并配置管理员&lt;/h2&gt;
+&lt;p&gt;首先前往 &lt;a href=&quot;https://ym.163.com/&quot;&gt;网易免费企业邮箱&lt;/a&gt; 创建一个账号。直接用手机号注册&lt;/p&gt;
+&lt;p&gt;注意，注册完毕后登录账户名和登录密码会通过&lt;strong&gt;短信&lt;/strong&gt;发给你，然后前往 https://mail.qiye.163.com/ 进行登录&lt;/p&gt;
+&lt;p&gt;如果你不喜欢系统随机生成的密码，可以先点击忘记密码，然后填写账户名，验证绑定的手机号后即可重置密码&lt;/p&gt;
+&lt;p&gt;登陆进去后大概是这样&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/65e5b400-96d7-44c6-b16e-a7a409104c3c.DIlVUdsv_1Kkj1r.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;如果你不喜欢你的账户名，比如我的就是 &lt;strong&gt;erchashush&lt;/strong&gt; @acofork.freeqiye.com，这个erchashush其实是可以更改的&lt;/p&gt;
+&lt;p&gt;在组织机构管理中点击账号管理，选择新建账号&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/a20e7931-c460-4134-b1b0-0fee82f8a7fc.HOtGv46q_NKWbu.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;然后写一个你想要的别名。绑定手机填你的，因为第一次登录需要验证码验证，如果填错了直接删除即可&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/b9ac287d-ff90-4f8c-88ba-0d7bb1588f1c.CLCAm3VD_ZkLSD7.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;然后我们需要给这个新账号提权，如果你想用superadmin登录后台的话&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/6f21feca-984d-444e-b80f-bf1a28e4cf79.C3B43xx9_ZEkEkg.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;接着右上角退出登录，然后使用新创建的管理员账户登录&lt;/p&gt;
+&lt;h2&gt;绑定你的域名&lt;/h2&gt;
+&lt;p&gt;前往组织机构管理 - 域名管理 - 添加域名
+&lt;img src=&quot;https://2x.nz/_astro/2fa04b72-f0e7-43c0-9c2a-1daab62e67cb.BLUNEm3u_2rSFmu.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;根据提示在你的域名提供商（比如Cloudflare）配置TXT记录和MX记录即可&lt;/p&gt;
+&lt;h2&gt;登录你的邮箱&lt;/h2&gt;
+&lt;p&gt;前往 &lt;a href=&quot;https://dashi.163.com/&quot;&gt;网易邮箱大师-高效强大的全平台邮箱客户端&lt;/a&gt; 下载对应的版本&lt;/p&gt;
+&lt;p&gt;使用你的邮箱 + 密码进行登录即可。如果需要手机验证验证即可。最好下载一个手机端的网易邮箱大师，在手机端登录后任何其他平台登录都会需要手机端授权，更安全&lt;/p&gt;
+&lt;h2&gt;效果展示&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/614794bd-d84d-4b66-b816-1d6d6ce73727.B-BKEgJg_Z1QdEDs.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;签名和发件人头像可以通过手机的网易邮箱大师设置&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://2x.nz/_astro/57f759bc-46fb-4f99-b6bb-751464661240.DRSHb9It_1yLiaj.webp&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</content:encoded></item></channel></rss>
