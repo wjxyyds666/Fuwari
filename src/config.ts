@@ -60,7 +60,7 @@ export const siteConfig: SiteConfig = {
 		{ url: "https://blog.6666116.xyz", alias: "Cloudflare" },
 		{ url: "https://fuwari.edgeone.cool", alias: "EdgeOne CN" },
 		
-		{ url: "https://blog.6666116.xyz", alias: "GitHub Pages(旧博客)" },
+		{ url: "https://blog1.6666116.xyz", alias: "Vercel" },
 		{ url: "http://wjxyyds666.github.io", alias: "GitHub Pages(旧博客)" }
 	],
 };
@@ -141,3 +141,4 @@ export const gitHubEditConfig: GitHubEditConfig = {
 
 
 // todoConfig removed from here
+
