@@ -57,11 +57,11 @@ export const siteConfig: SiteConfig = {
 		},
 	],
 	officialSites: [
-		{ url: "http://blog.6666116.xyz", alias: "Cloudflare" },
-		{ url: "http://wjxyyds666.github.io", alias: "GitHub Pages(旧博客)" },
+		{ url: "https://blog.6666116.xyz", alias: "Cloudflare" },
+		{ url: "https://fuwari.edgeone.cool", alias: "EdgeOne CN" },
 		
-		{ url: "", alias: "还没想好放哪个部署" },
-		{ url: "http://localhost:4321", alias: "电脑本地" }
+		{ url: "https://blog.6666116.xyz", alias: "GitHub Pages(旧博客)" },
+		{ url: "http://wjxyyds666.github.io", alias: "GitHub Pages(旧博客)" }
 	],
 };
 
@@ -138,5 +138,6 @@ export const gitHubEditConfig: GitHubEditConfig = {
 	enable: true,
 	baseUrl: "放自己的仓库文章地址",
 };
+
 
 // todoConfig removed from here
