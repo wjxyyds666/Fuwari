@@ -33,14 +33,14 @@ export default defineConfig({
       image: {
     service: passthroughImageService()
   },
-    site: "https://2x.nz",
+    site: "https://blog.6666116.xyz",
     base: "/",
     trailingSlash: "always",
     output: "static",
     redirects: {
       "/donate": "/sponsors",
-      "/ak": "https://akile.io/register?aff_code=503fe5ea-e7c5-4d68-ae05-6de99513680e",
-      "/kook": "https://kook.vip/K29zpT",
+      "/ak": "https://blog.6666116.xyz",
+      "/kook": "https://qun.qq.com/universal-share/share?ac=1&authKey=idB7BUJWQp4KUSKvXILZESWYDwlohkpDBKeoKZBfBllSQDi0yAmZZq2lpfaHmjCf&busi_data=eyJncm91cENvZGUiOiIxMDY0MTAyMDI4IiwidG9rZW4iOiJXN0ZWb1FUdFdWVmF5Q3VFNzJkaWlUSDBUdWgwYTRJWlBVa1hYay9lSkRiNHVkVDNxd1NGelk5L0dFUFpsb2tsIiwidWluIjoiMzY4NTIzNDgwMSJ9&data=WIk8dO3q5fQxhn0VJSfcL8fhFfBtisPm4Vn5gQVPLLmfqZ3c0lGSNQBQh3UOtewUGwotRBe5EzLswb-JQqLEuA&svctype=4&tempid=h5_group_info",
       "/long": "https://iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii.iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii.in/",
       "/mly": "https://muleyun.com/aff/GOTRJLPN",
       "/tg": "https://t.me/+_07DERp7k1ljYTc1",
