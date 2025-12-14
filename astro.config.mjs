@@ -3,7 +3,7 @@ import svelte from "@astrojs/svelte";
 import tailwind from "@astrojs/tailwind";
 import swup from "@swup/astro";
 import icon from "astro-icon";
-import { defineConfig, passthroughImageService } from "astro/config"; // 合并重复的导入
+import { defineConfig, passthroughImageService } from "astro/config";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeComponents from "rehype-components";
 import rehypeKatex from "rehype-katex";
@@ -26,20 +26,27 @@ import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import { expressiveCodeConfig } from "./src/config.ts";
 import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-copy-button.js";
 
-// 从环境变量读取配置，默认适配Cloudflare Pages
-const PUBLIC_BASE = import.meta.env.PUBLIC_BASE || "/";
-const PUBLIC_SITE = import.meta.env.PUBLIC_SITE || "https://blog.6666116.xyz";
+// 动态适配双平台：通过环境变量PLATFORM区分，默认Cloudflare（main分支用）
+const PLATFORM = import.meta.env.PLATFORM || "cloudflare";
+// Cloudflare配置（main分支，自定义域名，根路径）
+const CF_CONFIG = {
+  site: "https://blog.6666116.xyz", // 你的Cloudflare自定义域名
+  base: "/", // Cloudflare根路径，保留原有效果
+};
+// GitHub配置（gh-pages分支，GitHub域名+仓库名路径）
+const GH_CONFIG = {
+  site: "https://wjxyyds666.github.io", // 你的GitHub Pages根域名
+  base: "/Fuwari", // 替换为你的GitHub仓库名（必填，否则样式错乱）
+};
+const CURRENT_CONFIG = PLATFORM === "cloudflare" ? CF_CONFIG : GH_CONFIG;
 
-// https://astro.build/config
 export default defineConfig({
-  image: {
-    service: passthroughImageService()
-  },
-  site: PUBLIC_SITE, // 动态设置site
-  base: PUBLIC_BASE, // 动态设置base
+  image: { service: passthroughImageService() },
+  site: CURRENT_CONFIG.site,
+  base: CURRENT_CONFIG.base,
   trailingSlash: "always",
   output: "static",
-  redirects: {
+  redirects: { // 保留你原有重定向配置，不变
     "/donate": "/sponsors",
     "/ak": "https://blog.6666116.xyz",
     "/kook": "https://qun.qq.com/universal-share/share?ac=1&authKey=idB7BUJWQp4KUSKvXILZESWYDwlohkpDBKeoKZBfBllSQDi0yAmZZq2lpfaHmjCf&busi_data=eyJncm91cENvZGUiOiIxMDY0MTAyMDI4IiwidG9rZW4iOiJXN0ZWb1FUdFdWVmF5Q3VFNzJkaWlUSDBUdWgwYTRJWlBVa1hYay9lSkRiNHVkVDNxd1NGelk5L0dFUFpsb2tsIiwidWluIjoiMzY4NTIzNDgwMSJ9&data=WIk8dO3q5fQxhn0VJSfcL8fhFfBtisPm4Vn5gQVPLLmfqZ3c0lGSNQBQh3UOtewUGwotRBe5EzLswb-JQqLEuA&svctype=4&tempid=h5_group_info",
@@ -53,9 +60,7 @@ export default defineConfig({
     "/iku": "https://ikuuu.de/auth/register?code=Bjou"
   },
   integrations: [
-    tailwind({
-      nesting: true,
-    }), 
+    tailwind({ nesting: true }),
     swup({
       theme: false,
       animationClass: "transition-swup-",
@@ -67,32 +72,23 @@ export default defineConfig({
       updateHead: true,
       updateBodyClass: false,
       globalInstance: true,
-    }), 
+    }),
     icon({
       include: {
-        "preprocess: vitePreprocess(),": ["*"],
         "fa6-brands": ["*"],
         "fa6-regular": ["*"],
         "fa6-solid": ["*"],
         "simple-icons": ["*"],
       },
-    }), 
-    svelte(), 
+    }),
+    svelte(),
     sitemap(),
     expressiveCode({
       themes: [expressiveCodeConfig.theme, expressiveCodeConfig.theme],
-      plugins: [
-        pluginCollapsibleSections(),
-        pluginLineNumbers(),
-        pluginCustomCopyButton()
-      ],
+      plugins: [pluginCollapsibleSections(), pluginLineNumbers(), pluginCustomCopyButton()],
       defaultProps: {
         wrap: true,
-        overridesByLang: {
-          'shellsession': {
-            showLineNumbers: false,
-          },
-        },
+        overridesByLang: { 'shellsession': { showLineNumbers: false } },
       },
       styleOverrides: {
         codeBackground: "var(--codeblock-bg)",
@@ -112,85 +108,44 @@ export default defineConfig({
           editorTabBarBorderBottomColor: "var(--codeblock-topbar-bg)",
           terminalTitlebarBorderBottomColor: "none"
         },
-        textMarkers: {
-          delHue: 0,
-          insHue: 180,
-          markHue: 250
-        }
+        textMarkers: { delHue: 0, insHue: 180, markHue: 250 }
       },
-      frames: {
-        showCopyToClipboardButton: false,
-      }
+      frames: { showCopyToClipboardButton: false },
     }),
   ],
   markdown: {
-    remarkPlugins: [
-      remarkMath,
-      remarkReadingTime,
-      remarkExcerpt,
-      remarkGithubAdmonitionsToDirectives,
-      remarkDirective,
-      remarkSectionize,
-      parseDirectiveNode,
-    ],
+    remarkPlugins: [remarkMath, remarkReadingTime, remarkExcerpt, remarkGithubAdmonitionsToDirectives, remarkDirective, remarkSectionize, parseDirectiveNode],
     rehypePlugins: [
       rehypeKatex,
       rehypeSlug,
       [rehypeImageFallback, imageFallbackConfig],
-      [
-        rehypeComponents,
-        {
-          components: {
-            github: GithubCardComponent,
-            note: (x, y) => AdmonitionComponent(x, y, "note"),
-            tip: (x, y) => AdmonitionComponent(x, y, "tip"),
-            important: (x, y) => AdmonitionComponent(x, y, "important"),
-            caution: (x, y) => AdmonitionComponent(x, y, "caution"),
-            warning: (x, y) => AdmonitionComponent(x, y, "warning"),
-          },
+      [rehypeComponents, {
+        components: {
+          github: GithubCardComponent,
+          note: (x,y)=>AdmonitionComponent(x,y,"note"),
+          tip: (x,y)=>AdmonitionComponent(x,y,"tip"),
+          important: (x,y)=>AdmonitionComponent(x,y,"important"),
+          caution: (x,y)=>AdmonitionComponent(x,y,"caution"),
+          warning: (x,y)=>AdmonitionComponent(x,y,"warning"),
         },
-      ],
-      [
-        rehypeExternalLinks,
-        {
-          target: '_blank',
+      }],
+      [rehypeExternalLinks, { target: '_blank' }],
+      [rehypeAutolinkHeadings, {
+        behavior: "append",
+        properties: { className: ["anchor"] },
+        content: {
+          tagName: "span",
+          properties: { className: ["anchor-icon"], "data-pagefind-ignore": true },
+          children: [{ type: "text", value: "#" }],
         },
-      ],
-      [
-        rehypeAutolinkHeadings,
-        {
-          behavior: "append",
-          properties: {
-            className: ["anchor"],
-          },
-          content: {
-            type: "element",
-            tagName: "span",
-            properties: {
-              className: ["anchor-icon"],
-              "data-pagefind-ignore": true,
-            },
-            children: [
-              {
-                type: "text",
-                value: "#",
-              },
-            ],
-          },
-        },
-      ],
+      }],
     ],
   },
   vite: {
     build: {
       rollupOptions: {
         onwarn(warning, warn) {
-          if (
-            warning.message.includes("is dynamically imported by") &&
-            warning.message.includes("but also statically imported by")
-          ) {
-            return;
-          }
+          if (warning.message.includes("dynamically imported by") && warning.message.includes("statically imported by")) return;
           warn(warning);
         },
       },
