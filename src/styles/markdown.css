@@ -1,3 +1,8 @@
+/* 引入Tailwind的基础、组件、工具层，必须放在最顶部 */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* 1. 定义缺失的 btn-regular-dark 组件类（匹配项目CSS变量风格） */
 @layer components {
   .btn-regular-dark {
@@ -123,9 +128,10 @@
     }
   }
 
-  /* 块引用样式 */
+  /* 块引用样式：修复font-inherit不存在的错误，替换为原生font: inherit */
   blockquote {
-    @apply not-italic border-transparent relative font-inherit;
+    @apply not-italic border-transparent relative;
+    font: inherit; /* 替换原错误的@apply font-inherit; */
 
     &:before {
       @apply content-[''] absolute -left-1 block transition bg-[var(--btn-regular-bg)] h-full w-1 rounded-full;
