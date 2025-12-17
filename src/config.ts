@@ -142,5 +142,3 @@ export const gitHubEditConfig: GitHubEditConfig = {
 
 // todoConfig removed from here
 
-
-
