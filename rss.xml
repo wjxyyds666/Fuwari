@@ -1,4 +1,163 @@
 <?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>嘿！ Blog</title><description>技术分享与实践</description><link>https://blog.6666116.xyz/</link><language>zh_CN</language><item><title>视频测试</title><link>https://blog.6666116.xyz/posts/helloword/</link><guid isPermaLink="true">https://blog.6666116.xyz/posts/helloword/</guid><pubDate>Sat, 06 Dec 2025 11:05:26 GMT</pubDate><content:encoded>&lt;p&gt;&amp;lt;iframe src=&quot;//player.bilibili.com/player.html?isOutside=true&amp;amp;aid=115474054518084&amp;amp;bvid=BV1EP1jB9EWc&amp;amp;cid=33593622862&amp;amp;p=1&amp;amp;autoplay=0&quot; scrolling=&quot;no&quot; border=&quot;0&quot; frameborder=&quot;no&quot; framespacing=&quot;0&quot; allowfullscreen=&quot;true&quot; width=&quot;100%&quot; height=&quot;460px&quot;&amp;gt;&amp;lt;/iframe&amp;gt;&lt;/p&gt;
+</content:encoded></item><item><title>视频测试</title><link>https://blog.6666116.xyz/posts/trmuxlz/</link><guid isPermaLink="true">https://blog.6666116.xyz/posts/trmuxlz/</guid><pubDate>Sat, 06 Dec 2025 11:05:26 GMT</pubDate><content:encoded>&lt;h1&gt;通过trmux搭建个人博客&lt;/h1&gt;
+&lt;h2&gt;项目介绍&lt;/h2&gt;
+&lt;p&gt;Fuwari一个基于 Astro 构建的现代化个人博客主题，专注于技术分享与实践。&lt;/p&gt;
+&lt;h2&gt;✨ 特性&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;🚀 基于 Astro 4.0+ 构建，性能卓越&lt;/li&gt;
+&lt;li&gt;📱 完全响应式设计，支持移动端&lt;/li&gt;
+&lt;li&gt;🌙 支持深色/浅色主题切换&lt;/li&gt;
+&lt;li&gt;📝 支持 Markdown 和 MDX 格式&lt;/li&gt;
+&lt;li&gt;🔍 内置搜索功能&lt;/li&gt;
+&lt;li&gt;📊 文章阅读时间统计&lt;/li&gt;
+&lt;li&gt;🏷️ 标签和分类系统&lt;/li&gt;
+&lt;li&gt;📈 SEO 优化&lt;/li&gt;
+&lt;li&gt;🎨 可自定义配置&lt;/li&gt;
+&lt;li&gt;💬 评论系统支持&lt;/li&gt;
+&lt;li&gt;📡 RSS 订阅支持&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;🛠️ 技术栈&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;框架&lt;/strong&gt;: Astro&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;样式&lt;/strong&gt;: Tailwind CSS + Stylus&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;交互&lt;/strong&gt;: Svelte&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;构建工具&lt;/strong&gt;: Vite&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;包管理&lt;/strong&gt;: pnpm&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;代码规范&lt;/strong&gt;: Biome&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;🚀 环境安装&lt;/h2&gt;
+&lt;h3&gt;环境要求&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Node.js 18+&lt;/li&gt;
+&lt;li&gt;pnpm&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;更新trmux环境&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;pkg update &amp;amp;&amp;amp; pkg upgrade -y
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;安装curl(等会下载nvm需要)&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;pkg install curl -y
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;安装nvm环境&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;创建bashrc文件&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;touch ~/.bashrc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;给bashrc文件权限&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;chmod 644 ~/.bashrc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;将nvm配置写入bashrc文件&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;echo &apos;export NVM_DIR=&quot;$HOME/.nvm&quot;
+[ -s &quot;$NVM_DIR/nvm.sh&quot; ] &amp;amp;&amp;amp; \. &quot;$NVM_DIR/nvm.sh&quot;  # 加载nvm&apos; &amp;gt;&amp;gt; ~/.bashrc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;执行bashrc文件&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;source ~/.bashrc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;安装Node.js(这后面的数字可以改，截止这个文章发布最新版是25，所以我填的是25)&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;nvm install 25
+nvm alias default 25
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;验证是否安装成功(安装成功后可以返回版本号，如果没有了，就是没有安装成功)&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;node -v
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;安装pnpm&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;npm install -g pnpm
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;安装Fuwari&lt;/h2&gt;
+&lt;p&gt;先打开Fuwari官方仓库&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/saicaca/fuwari&quot;&gt;点击跳转Fuwari官方仓库&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;复制仓库克隆地址，然后按照教程官方仓库里面的安装，不会的，照我下面这个安装&lt;/p&gt;
+&lt;p&gt;这下面每一行都是一个指令，先复制一行，然后去执行，执行完后，在复制下一行，执行下一行的，就这样，一直执行到最后一行，把trmux输出的链接，复制到浏览器打开(懒得在写一行指令解释一下，所以干脆把指令全部写出来，一个你们一个个执行就行了)&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git clone https://github.com/saicaca/fuwari
+cd fuwari
+pnpm install
+pnpm dev
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这个 http://localhost:4321/ 网址，把它输到浏览器就可以看到你的博客了&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://cccimg.com/view.php/4f28c5f01f8571f771dd92948372d8f8.jpg&quot;&gt;&lt;img src=&quot;https://cccimg.com/view.php/4f28c5f01f8571f771dd92948372d8f8.jpg&quot; alt=&quot;图片&quot; title=&quot;图片&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;📝 使用指南&lt;/h2&gt;
+&lt;h3&gt;创建新文章&lt;/h3&gt;
+&lt;p&gt;使用内置脚本快速创建新文章：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;pnpm new-post helloword
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;清理未使用的图片&lt;/h3&gt;
+&lt;p&gt;清理 &lt;code&gt;src/content/assets&lt;/code&gt; 目录下未被引用的图片文件：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;pnpm clean
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;配置博客&lt;/h3&gt;
+&lt;p&gt;编辑 &lt;code&gt;src/config.ts&lt;/code&gt; 文件来自定义博客配置：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;export const siteConfig: SiteConfig = {
+  title: &quot;Fuwari&quot;,
+  subtitle: &quot;技术分享与实践&quot;,
+  lang: &quot;zh_CN&quot;,
+  themeColor: {
+    hue: 250,
+    fixed: false,
+  },
+  banner: {
+    enable: false,
+    src: &quot;assets/images/demo-banner.png&quot;,
+    position: &quot;center&quot;,
+  },
+  favicon: [
+    {
+      src: &quot;/favicon/icon.png&quot;,
+    }
+  ]
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;文章格式&lt;/h3&gt;
+&lt;p&gt;文章使用 Markdown 格式，支持 frontmatter：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;---
+title: 文章标题
+published: 2024-01-01
+description: 文章描述
+image: ./cover.jpg
+tags: [标签1, 标签2]
+category: 分类
+draft: false
+---
+
+# 文章内容
+
+这里是文章正文...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;📁 项目结构&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;├── public/                 # 静态资源
+├── src/
+│   ├── components/         # 组件
+│   ├── content/           # 内容
+│   │   ├── posts/         # 博客文章
+│   │   └── assets/        # 资源文件
+│   ├── layouts/           # 布局
+│   ├── pages/             # 页面
+│   ├── styles/            # 样式
+│   └── config.ts          # 配置文件
+├── scripts/               # 脚本工具
+└── package.json
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;🎨 自定义&lt;/h2&gt;
+&lt;h3&gt;主题颜色&lt;/h3&gt;
+&lt;p&gt;在 &lt;code&gt;src/config.ts&lt;/code&gt; 中修改 &lt;code&gt;themeColor&lt;/code&gt; 配置：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;themeColor: {
+  hue: 250,        // 主色调 (0-360)
+  fixed: false,    // 是否固定颜色
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;样式定制&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;全局样式：&lt;code&gt;src/styles/main.css&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Markdown 样式：&lt;code&gt;src/styles/markdown.css&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;变量定义：&lt;code&gt;src/styles/variables.styl&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;📦 部署&lt;/h2&gt;
+&lt;p&gt;构建后的静态文件位于 &lt;code&gt;dist/&lt;/code&gt; 目录，可部署到任何静态托管平台。&lt;/p&gt;
+&lt;h2&gt;🤝 贡献&lt;/h2&gt;
+&lt;p&gt;欢迎提交 Issue 和 Pull Request！&lt;/p&gt;
+&lt;h2&gt;📄 许可证&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;LICENSE&quot;&gt;MIT License&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;🙏 致谢&lt;/h2&gt;
+&lt;p&gt;感谢所有为这个项目做出贡献的开发者们！尤其感谢&lt;a href=&quot;https://github.com/saicaca/fuwari&quot;&gt;上游仓库&lt;/a&gt;&lt;/p&gt;
 </content:encoded></item><item><title>全自动ICP查询API</title><link>https://blog.6666116.xyz/posts/auto-icp-query/</link><guid isPermaLink="true">https://blog.6666116.xyz/posts/auto-icp-query/</guid><description>突然听到个很有意思的项目：自动ICP查询，搜集了一下市面上的轮子然后改改，嗯！能用了！</description><pubDate>Fri, 12 Sep 2025 04:50:10 GMT</pubDate><content:encoded>&lt;h1&gt;原理&lt;/h1&gt;
 &lt;p&gt;由 &lt;a href=&quot;https://github.com/ravizhan/ICP-spider&quot;&gt;ravizhan/ICP-spider: 基于yolov8+孪生网络识别验证码的ICP备案查询程序。从工业和信息化部政务服务平台查询实时数据，高精度过验证码&lt;/a&gt; 提供图形验证码支持&lt;/p&gt;
 &lt;p&gt;因为验证码识别成功后得到的Token有效时间大概为30s，此期间无需再次重新识别，故开发一个Token生命周期管理器，后台始终维护有效的Token，用户查询时直接使用有效的Token查询，方便快速&lt;/p&gt;
