@@ -1,3 +1,13 @@
+---
+title: 视频测试
+published: 2025-12-06T11:05:26
+description: ''
+image: ''
+tags: []
+
+draft: false 
+lang: ''
+---
 # 通过trmux搭建个人博客
 
 ## 项目介绍
