@@ -1,6 +1,6 @@
----
-title: 视频测试
-published: 2025-12-06T11:05:26
+---通过trmux搭建个人博客
+title: 
+published: 2025-12-18T11:05:26
 description: ''
 image: ''
 tags: []
@@ -242,3 +242,4 @@ themeColor: {
 ## 🙏 致谢
 
 感谢所有为这个项目做出贡献的开发者们！尤其感谢[上游仓库](https://github.com/saicaca/fuwari)
+
